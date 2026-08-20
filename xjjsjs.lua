@@ -1,4 +1,4 @@
--- // VelocityHub By Squez3 // --
+-- // VelocityHub By Squez3 v2 // --
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
@@ -38,91 +38,130 @@ Gui.Parent = PlayerGui
 Gui.ResetOnSpawn = false
 Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Main Container
+-- Кнопка открытия (сверху)
+local OpenBtn = Instance.new("TextButton")
+OpenBtn.Parent = Gui
+OpenBtn.Size = UDim2.new(0, 40, 0, 30)
+OpenBtn.Position = UDim2.new(0, 10, 0, 10)
+OpenBtn.BackgroundColor3 = Color3.fromRGB(15, 15, 18)
+OpenBtn.Text = "+"
+OpenBtn.TextColor3 = Color3.fromRGB(200, 200, 210)
+OpenBtn.Font = Enum.Font.GothamBlack
+OpenBtn.TextSize = 18
+OpenBtn.Visible = false
+OpenBtn.ZIndex = 1000
+Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(0, 6)
+
+-- Main
 local Main = Instance.new("Frame")
 Main.Parent = Gui
-Main.Size = UDim2.new(0, 600, 0, 400)
-Main.Position = UDim2.new(0.5, -300, 0.5, -200)
-Main.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
+Main.Size = UDim2.new(0, 550, 0, 370)
+Main.Position = UDim2.new(0.5, -275, 0.5, -185)
+Main.BackgroundColor3 = Color3.fromRGB(8, 8, 10)
 Main.Visible = true
 Main.Active = true
 Main.Draggable = true
 Main.ZIndex = 999
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 8)
 
--- Header с логотипом
-local Header = Instance.new("Frame")
-Header.Parent = Main
-Header.Size = UDim2.new(0, 170, 1, 0)
-Header.BackgroundColor3 = Color3.fromRGB(15, 15, 18)
-Instance.new("UICorner", Header).CornerRadius = UDim.new(0, 8)
+local Border = Instance.new("UIStroke")
+Border.Parent = Main
+Border.Color = Color3.fromRGB(50, 50, 58)
+Border.Thickness = 1
+
+-- Header Bar
+local HeaderBar = Instance.new("Frame")
+HeaderBar.Parent = Main
+HeaderBar.Size = UDim2.new(1, 0, 0, 35)
+HeaderBar.BackgroundColor3 = Color3.fromRGB(12, 12, 15)
+Instance.new("UICorner", HeaderBar).CornerRadius = UDim.new(0, 8)
 
 local Logo = Instance.new("TextLabel")
-Logo.Parent = Header
-Logo.Size = UDim2.new(1, -20, 0, 40)
-Logo.Position = UDim2.new(0, 15, 0, 15)
+Logo.Parent = HeaderBar
+Logo.Size = UDim2.new(0, 150, 1, 0)
+Logo.Position = UDim2.new(0, 15, 0, 0)
 Logo.BackgroundTransparency = 1
 Logo.Text = "VelocityHub"
 Logo.TextColor3 = Color3.fromRGB(220, 220, 230)
 Logo.Font = Enum.Font.GothamBlack
-Logo.TextSize = 16
+Logo.TextSize = 14
 Logo.TextXAlignment = Enum.TextXAlignment.Left
 
 local SubLogo = Instance.new("TextLabel")
-SubLogo.Parent = Header
-SubLogo.Size = UDim2.new(1, -20, 0, 20)
-SubLogo.Position = UDim2.new(0, 15, 0, 55)
+SubLogo.Parent = HeaderBar
+SubLogo.Size = UDim2.new(0, 80, 1, 0)
+SubLogo.Position = UDim2.new(0, 150, 0, 0)
 SubLogo.BackgroundTransparency = 1
 SubLogo.Text = "By Squez3"
-SubLogo.TextColor3 = Color3.fromRGB(120, 120, 130)
+SubLogo.TextColor3 = Color3.fromRGB(100, 100, 110)
 SubLogo.Font = Enum.Font.Gotham
-SubLogo.TextSize = 10
+SubLogo.TextSize = 9
 SubLogo.TextXAlignment = Enum.TextXAlignment.Left
 
--- Navigation
-local Nav = Instance.new("ScrollingFrame")
-Nav.Parent = Header
-Nav.Size = UDim2.new(1, 0, 1, -80)
-Nav.Position = UDim2.new(0, 0, 0, 80)
-Nav.BackgroundTransparency = 1
-Nav.ScrollBarThickness = 0
-Nav.CanvasSize = UDim2.new(0, 0, 0, 0)
+-- Кнопка сворачивания (минус)
+local MinimizeBtn = Instance.new("TextButton")
+MinimizeBtn.Parent = HeaderBar
+MinimizeBtn.Size = UDim2.new(0, 35, 0, 25)
+MinimizeBtn.Position = UDim2.new(1, -45, 0.5, -12)
+MinimizeBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+MinimizeBtn.Text = "—"
+MinimizeBtn.TextColor3 = Color3.fromRGB(180, 180, 190)
+MinimizeBtn.Font = Enum.Font.GothamBlack
+MinimizeBtn.TextSize = 14
+Instance.new("UICorner", MinimizeBtn).CornerRadius = UDim.new(0, 5)
+
+MinimizeBtn.MouseButton1Click:Connect(function()
+    Main.Visible = false
+    OpenBtn.Visible = true
+end)
+
+OpenBtn.MouseButton1Click:Connect(function()
+    Main.Visible = true
+    OpenBtn.Visible = false
+end)
+
+-- Left Navigation
+local Nav = Instance.new("Frame")
+Nav.Parent = Main
+Nav.Size = UDim2.new(0, 140, 1, -35)
+Nav.Position = UDim2.new(0, 0, 0, 35)
+Nav.BackgroundColor3 = Color3.fromRGB(10, 10, 13)
+Instance.new("UICorner", Nav).CornerRadius = UDim.new(0, 8)
 
 local NavLayout = Instance.new("UIListLayout")
 NavLayout.Parent = Nav
 NavLayout.SortOrder = Enum.SortOrder.LayoutOrder
-NavLayout.Padding = UDim.new(0, 4)
+NavLayout.Padding = UDim.new(0, 2)
 
 local Pages = {}
 local NavButtons = {}
 
-local function CreateTab(name, order)
+local function CreateTab(name, icon, order)
     local btn = Instance.new("TextButton")
     btn.Parent = Nav
-    btn.Size = UDim2.new(1, -20, 0, 30)
+    btn.Size = UDim2.new(1, -20, 0, 32)
     btn.BackgroundTransparency = 1
-    btn.Text = name
+    btn.Text = "  " .. icon .. "  " .. name
     btn.TextColor3 = Color3.fromRGB(130, 130, 140)
     btn.Font = Enum.Font.GothamMedium
-    btn.TextSize = 13
+    btn.TextSize = 12
     btn.TextXAlignment = Enum.TextXAlignment.Left
-    btn.ZIndex = 1000
     
     local page = Instance.new("ScrollingFrame")
     page.Parent = Main
-    page.Size = UDim2.new(1, -180, 1, -10)
-    page.Position = UDim2.new(0, 175, 0, 10)
+    page.Size = UDim2.new(1, -150, 1, -45)
+    page.Position = UDim2.new(0, 145, 0, 42)
     page.BackgroundTransparency = 1
     page.Visible = false
     page.ScrollBarThickness = 2
-    page.ScrollBarImageColor3 = Color3.fromRGB(80, 80, 90)
+    page.ScrollBarImageColor3 = Color3.fromRGB(60, 60, 70)
     page.AutomaticCanvasSize = Enum.AutomaticSize.Y
     page.CanvasSize = UDim2.new(0, 0, 0, 0)
     
     local layout = Instance.new("UIListLayout")
     layout.Parent = page
     layout.SortOrder = Enum.SortOrder.LayoutOrder
-    layout.Padding = UDim.new(0, 10)
+    layout.Padding = UDim.new(0, 8)
     
     Pages[name] = page
     NavButtons[name] = btn
@@ -139,64 +178,63 @@ local function CreateTab(name, order)
     return page
 end
 
-local Visuals = CreateTab("Visuals", 1)
-local Combat = CreateTab("Combat", 2)
-local Effects = CreateTab("Effects", 3)
-local Config = CreateTab("Config", 4)
+local Visuals = CreateTab("Visuals", "◈", 1)
+local Combat = CreateTab("Combat", "◉", 2)
+local Effects = CreateTab("Effects", "◇", 3)
+local Config = CreateTab("Config", "▣", 4)
 
 Pages["Visuals"].Visible = true
 NavButtons["Visuals"].TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- Элементы в стиле VelocityHub
+-- Элементы
 local function AddToggle(page, text, key)
     local c = Instance.new("Frame")
     c.Parent = page
     c.Size = UDim2.new(0.95, 0, 0, 35)
-    c.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+    c.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
     Instance.new("UICorner", c).CornerRadius = UDim.new(0, 6)
     
     local btn = Instance.new("TextButton")
     btn.Parent = c
-    btn.Size = UDim2.new(1, -50, 1, 0)
+    btn.Size = UDim2.new(1, -55, 1, 0)
     btn.BackgroundTransparency = 1
     btn.Text = text
     btn.TextColor3 = Color3.fromRGB(180, 180, 190)
     btn.Font = Enum.Font.Gotham
-    btn.TextSize = 13
+    btn.TextSize = 12
     btn.TextXAlignment = Enum.TextXAlignment.Left
     btn.Position = UDim2.new(0, 12, 0, 0)
     
-    -- Круглый тумблер
     local toggle = Instance.new("Frame")
     toggle.Parent = c
-    toggle.Size = UDim2.new(0, 40, 0, 20)
-    toggle.Position = UDim2.new(1, -50, 0.5, -10)
+    toggle.Size = UDim2.new(0, 38, 0, 19)
+    toggle.Position = UDim2.new(1, -48, 0.5, -9)
     toggle.BackgroundColor3 = Color3.fromRGB(40, 40, 48)
     Instance.new("UICorner", toggle).CornerRadius = UDim.new(1, 0)
     
     local dot = Instance.new("Frame")
     dot.Parent = toggle
-    dot.Size = UDim2.new(0, 16, 0, 16)
-    dot.Position = UDim2.new(0, 2, 0.5, -8)
-    dot.BackgroundColor3 = Color3.fromRGB(200, 200, 210)
+    dot.Size = UDim2.new(0, 15, 0, 15)
+    dot.Position = UDim2.new(0, 2, 0.5, -7)
+    dot.BackgroundColor3 = Color3.fromRGB(180, 180, 190)
     Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
     
     if _G.VelocityHub[key] then
-        toggle.BackgroundColor3 = Color3.fromRGB(200, 200, 210)
-        dot.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
-        dot.Position = UDim2.new(1, -18, 0.5, -8)
+        toggle.BackgroundColor3 = Color3.fromRGB(180, 180, 190)
+        dot.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+        dot.Position = UDim2.new(1, -17, 0.5, -7)
     end
     
     btn.MouseButton1Click:Connect(function()
         _G.VelocityHub[key] = not _G.VelocityHub[key]
         if _G.VelocityHub[key] then
-            toggle.BackgroundColor3 = Color3.fromRGB(200, 200, 210)
-            dot.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
-            dot.Position = UDim2.new(1, -18, 0.5, -8)
+            toggle.BackgroundColor3 = Color3.fromRGB(180, 180, 190)
+            dot.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+            dot.Position = UDim2.new(1, -17, 0.5, -7)
         else
             toggle.BackgroundColor3 = Color3.fromRGB(40, 40, 48)
-            dot.BackgroundColor3 = Color3.fromRGB(200, 200, 210)
-            dot.Position = UDim2.new(0, 2, 0.5, -8)
+            dot.BackgroundColor3 = Color3.fromRGB(180, 180, 190)
+            dot.Position = UDim2.new(0, 2, 0.5, -7)
         end
     end)
 end
@@ -204,65 +242,65 @@ end
 local function AddSlider(page, text, key, min, max)
     local c = Instance.new("Frame")
     c.Parent = page
-    c.Size = UDim2.new(0.95, 0, 0, 55)
-    c.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+    c.Size = UDim2.new(0.95, 0, 0, 50)
+    c.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
     Instance.new("UICorner", c).CornerRadius = UDim.new(0, 6)
     
     local label = Instance.new("TextLabel")
     label.Parent = c
-    label.Size = UDim2.new(1, -20, 0, 25)
-    label.Position = UDim2.new(0, 12, 0, 5)
+    label.Size = UDim2.new(1, -70, 0, 20)
+    label.Position = UDim2.new(0, 12, 0, 3)
     label.BackgroundTransparency = 1
     label.Text = text
     label.TextColor3 = Color3.fromRGB(180, 180, 190)
     label.Font = Enum.Font.Gotham
-    label.TextSize = 12
+    label.TextSize = 11
     label.TextXAlignment = Enum.TextXAlignment.Left
     
     local valueLabel = Instance.new("TextLabel")
     valueLabel.Parent = c
-    valueLabel.Size = UDim2.new(0, 50, 0, 25)
-    valueLabel.Position = UDim2.new(1, -60, 0, 5)
+    valueLabel.Size = UDim2.new(0, 50, 0, 20)
+    valueLabel.Position = UDim2.new(1, -58, 0, 3)
     valueLabel.BackgroundTransparency = 1
     valueLabel.Text = tostring(_G.VelocityHub[key])
-    valueLabel.TextColor3 = Color3.fromRGB(150, 150, 160)
+    valueLabel.TextColor3 = Color3.fromRGB(140, 140, 150)
     valueLabel.Font = Enum.Font.Gotham
-    valueLabel.TextSize = 12
+    valueLabel.TextSize = 11
     valueLabel.TextXAlignment = Enum.TextXAlignment.Right
     
-    -- Горизонтальный слайдер
+    local minus = Instance.new("TextButton")
+    minus.Parent = c
+    minus.Size = UDim2.new(0, 30, 0, 20)
+    minus.Position = UDim2.new(0, 12, 0, 27)
+    minus.BackgroundColor3 = Color3.fromRGB(30, 30, 38)
+    minus.Text = "-"
+    minus.TextColor3 = Color3.fromRGB(180, 180, 190)
+    minus.TextSize = 13
+    Instance.new("UICorner", minus).CornerRadius = UDim.new(0, 4)
+    
+    local plus = Instance.new("TextButton")
+    plus.Parent = c
+    plus.Size = UDim2.new(0, 30, 0, 20)
+    plus.Position = UDim2.new(0, 48, 0, 27)
+    plus.BackgroundColor3 = Color3.fromRGB(30, 30, 38)
+    plus.Text = "+"
+    plus.TextColor3 = Color3.fromRGB(180, 180, 190)
+    plus.TextSize = 13
+    Instance.new("UICorner", plus).CornerRadius = UDim.new(0, 4)
+    
+    -- Полоса
     local bar = Instance.new("Frame")
     bar.Parent = c
-    bar.Size = UDim2.new(1, -24, 0, 4)
-    bar.Position = UDim2.new(0, 12, 0, 35)
+    bar.Size = UDim2.new(1, -100, 0, 4)
+    bar.Position = UDim2.new(0, 88, 0, 35)
     bar.BackgroundColor3 = Color3.fromRGB(40, 40, 48)
     Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
     
     local fill = Instance.new("Frame")
     fill.Parent = bar
     fill.Size = UDim2.new((_G.VelocityHub[key] - min) / (max - min), 0, 1, 0)
-    fill.BackgroundColor3 = Color3.fromRGB(200, 200, 210)
+    fill.BackgroundColor3 = Color3.fromRGB(180, 180, 190)
     Instance.new("UICorner", fill).CornerRadius = UDim.new(1, 0)
-    
-    local minus = Instance.new("TextButton")
-    minus.Parent = c
-    minus.Size = UDim2.new(0, 25, 0, 20)
-    minus.Position = UDim2.new(0, 12, 0, 40)
-    minus.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
-    minus.Text = "-"
-    minus.TextColor3 = Color3.fromRGB(180, 180, 190)
-    minus.TextSize = 14
-    Instance.new("UICorner", minus).CornerRadius = UDim.new(0, 4)
-    
-    local plus = Instance.new("TextButton")
-    plus.Parent = c
-    plus.Size = UDim2.new(0, 25, 0, 20)
-    plus.Position = UDim2.new(0, 42, 0, 40)
-    plus.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
-    plus.Text = "+"
-    plus.TextColor3 = Color3.fromRGB(180, 180, 190)
-    plus.TextSize = 14
-    Instance.new("UICorner", plus).CornerRadius = UDim.new(0, 4)
     
     local function update()
         valueLabel.Text = tostring(_G.VelocityHub[key])
@@ -287,7 +325,7 @@ end
 -- Visuals
 AddToggle(Visuals, "ESP", "ESP")
 AddToggle(Visuals, "Third Person", "ThirdPerson")
-AddSlider(Visuals, "Third Person Distance", "TPDistance", 5, 25)
+AddSlider(Visuals, "TP Distance", "TPDistance", 5, 25)
 AddToggle(Visuals, "FOV Player", "FOVPlayer")
 AddSlider(Visuals, "FOV Value", "FOVValue", 30, 120)
 AddToggle(Visuals, "Transparent Arms", "TransparentArms")
