@@ -1,6 +1,7 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local Lighting = game:GetService("Lighting")
+local UserInputService = game:GetService("UserInputService")
 local LP = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
@@ -24,18 +25,7 @@ _G.VH = {
 }
 
 local ValidKeys = {
-    ["ABC-DEF-GHI"] = 1, ["JKL-MNO-PQR"] = 1, ["STU-VWX-YZA"] = 1, ["BCD-EFG-HIJ"] = 1, ["KLM-NOP-QRS"] = 1,
-    ["TUV-WXY-ZAB"] = 1, ["CDE-FGH-IJK"] = 1, ["LMN-OPQ-RST"] = 1, ["UVW-XYZ-ABC"] = 1, ["DEF-GHI-JKL"] = 1,
-    ["MNO-PQR-STU"] = 3, ["VWX-YZA-BCD"] = 3, ["EFG-HIJ-KLM"] = 3, ["NOP-QRS-TUV"] = 3, ["WXY-ZAB-CDE"] = 3,
-    ["FGH-IJK-LMN"] = 3, ["OPQ-RST-UVW"] = 3, ["XYZ-ABC-DEF"] = 3, ["GHI-JKL-MNO"] = 3, ["PQR-STU-VWX"] = 3,
-    ["YZA-BCD-EFG"] = 14, ["HIJ-KLM-NOP"] = 14, ["QRS-TUV-WXY"] = 14, ["ZAB-CDE-FGH"] = 14, ["IJK-LMN-OPQ"] = 14,
-    ["RST-UVW-XYZ"] = 14, ["ABC-DEF-JKL"] = 14, ["MNO-PQR-VWX"] = 14, ["YZA-BCD-MNO"] = 14, ["HIJ-KLM-RST"] = 14,
-    ["UVW-XYZ-DEF"] = 30, ["GHI-JKL-PQR"] = 30, ["STU-VWX-ABC"] = 30, ["MNO-PQR-EFG"] = 30, ["HIJ-KLM-TUV"] = 30,
-    ["WXY-ZAB-DEF"] = 30, ["GHI-JKL-STU"] = 30, ["MNO-PQR-VWX"] = 30, ["YZA-BCD-EFG"] = 30, ["HIJ-KLM-NOP"] = 30,
-    ["QRS-TUV-XYZ"] = 60, ["ABC-DEF-STU"] = 60, ["MNO-PQR-GHI"] = 60, ["JKL-MNO-VWX"] = 60, ["YZA-BCD-RST"] = 60,
-    ["UVW-XYZ-MNO"] = 60, ["GHI-JKL-XYZ"] = 60, ["ABC-DEF-RST"] = 60, ["UVW-XYZ-MNO"] = 60, ["GHI-JKL-DEF"] = 60,
-    ["SQU-EZ3-FOR"] = 999, ["EVE-RLA-STI"] = 999, ["NGH-UBP-ERM"] = 999, ["ANE-NTF-ORE"] = 999, ["VER-SQU-EZ3"] = 999,
-    ["KEY-SYS-TEM"] = 999, ["LIF-ETI-MEK"] = 999, ["PER-MAN-ENT"] = 999, ["INF-IN-ITE"] = 999, ["SQU-EZ3-HUB"] = 999
+    ["SQU-EZ3-HUB"] = 999
 }
 
 local PlayerGui = LP:WaitForChild("PlayerGui")
@@ -44,20 +34,10 @@ if PlayerGui:FindFirstChild("VH") then
     PlayerGui.VH:Destroy()
 end
 
-local SavedKey = nil
-local SavedNick = nil
-pcall(function()
-    SavedKey = readfile("VH_Key.txt"):gsub("%s+", "")
-end)
-pcall(function()
-    SavedNick = readfile("VH_Nick.txt"):gsub("%s+", "")
-end)
-
 local Gui = Instance.new("ScreenGui")
 Gui.Name = "VH"
 Gui.Parent = PlayerGui
 Gui.ResetOnSpawn = false
-Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 -- KEY SCREEN
 local KeyScreen = Instance.new("Frame")
@@ -105,7 +85,7 @@ NickInput.Size = UDim2.new(1, -40, 0, 35)
 NickInput.Position = UDim2.new(0, 20, 0, 78)
 NickInput.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
 NickInput.PlaceholderText = "Nickname"
-NickInput.Text = SavedNick or ""
+NickInput.Text = ""
 NickInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 NickInput.Font = Enum.Font.Gotham
 NickInput.TextSize = 14
@@ -190,7 +170,7 @@ WelcomeText.Parent = SelectScreen
 WelcomeText.Size = UDim2.new(1, -30, 0, 35)
 WelcomeText.Position = UDim2.new(0, 15, 0, 50)
 WelcomeText.BackgroundTransparency = 1
-WelcomeText.Text = "Привет, " .. (SavedNick or "Игрок") .. "! Выбери Свою Версию и наслаждайся игрой"
+WelcomeText.Text = "Выбери Свою Версию"
 WelcomeText.TextColor3 = Color3.fromRGB(180, 180, 190)
 WelcomeText.Font = Enum.Font.Gotham
 WelcomeText.TextSize = 11
@@ -502,7 +482,7 @@ KBtn.MouseButton1Click:Connect(function()
         KStatus.TextColor3 = Color3.fromRGB(0, 255, 100)
         pcall(function() writefile("VH_Key.txt", key) end)
         pcall(function() writefile("VH_Nick.txt", nick) end)
-        WelcomeText.Text = "Привет, " .. nick .. "! Выбери Свою Версию и наслаждайся игрой"
+        WelcomeText.Text = "Привет, " .. nick .. "! Выбери Свою Версию"
         task.wait(1)
         KeyScreen.Visible = false
         SelectScreen.Visible = true
@@ -548,6 +528,45 @@ local function RemoveESP()
     end
 end
 
+-- [BULLET TRACERS]
+local firing = false
+
+UserInputService.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        firing = true
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        firing = false
+    end
+end)
+
+local function CreateTracer()
+    if not LP.Character or not LP.Character:FindFirstChild("Head") then return end
+    
+    local head = LP.Character.Head
+    local direction = Camera.CFrame.LookVector * 100
+    
+    local beam = Instance.new("Beam")
+    beam.Parent = workspace
+    beam.Attachment0 = Instance.new("Attachment", head)
+    beam.Attachment1 = Instance.new("Attachment")
+    beam.Attachment1.Parent = workspace
+    beam.Attachment1.WorldPosition = head.Position + direction
+    beam.Color = ColorSequence.new(Color3.fromRGB(255, 0, 150))
+    beam.Width0 = 2
+    beam.Width1 = 2
+    beam.Transparency = NumberSequence.new(0)
+    beam.Enabled = true
+    
+    task.spawn(function()
+        task.wait(0.1)
+        beam:Destroy()
+    end)
+end
+
 -- [SNOW]
 local SnowParts = {}
 local function CreateSnow()
@@ -556,6 +575,13 @@ local function CreateSnow()
     local range = _G.VH.SnowAmount
     for x = -range, range do
         for z = -range, range do
+            local part = Instance.new("Part")
+            part.Parent = workspace
+            part.Size = Vector3.new(50, 1, 50)
+            part.Position = Vector3.new(base.X + x*50, base.Y+40, base.Z + z*50)
+            part.Transparency = 1
+            part.Anchored = true
+            part.CanCollide = false
             local em = Instance.new("ParticleEmitter")
             em.Parent = part
             em.Rate = 25
@@ -579,15 +605,56 @@ local function RemoveSnow()
     SnowParts = {}
 end
 
--- [OPTIMIZATION]
-local function ApplyOpt()
-    Lighting.GlobalShadows = not (_G.VH.LiteOptimization or _G.VH.MaxOptimization)
+-- [OPTIMIZATION - КАРТОФЕЛЬ]
+local OriginalMaterials = {}
+
+local function ApplyMaxPotato()
     if _G.VH.MaxOptimization then
+        Lighting.GlobalShadows = false
         Lighting.FogEnd = 30
         Lighting.Brightness = 1
-    elseif _G.VH.LiteOptimization then
+        Lighting.Outlines = false
+        workspace.Terrain.WaterWaveSize = 0
+        workspace.Terrain.WaterWaveSpeed = 0
+        
+        for _, v in pairs(workspace:GetDescendants()) do
+            if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("UnionOperation") then
+                if not OriginalMaterials[v] then
+                    OriginalMaterials[v] = {
+                        Material = v.Material,
+                        CastShadow = v.CastShadow
+                    }
+                end
+                v.Material = Enum.Material.SmoothPlastic
+                v.CastShadow = false
+                v.Reflectance = 0
+                v.Color = Color3.fromRGB(128, 128, 128)
+            end
+            if v:IsA("Texture") or v:IsA("Decal") then
+                v.Transparency = 1
+            end
+            if v:IsA("ParticleEmitter") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
+                v.Enabled = false
+            end
+        end
+    else
+        for v, data in pairs(OriginalMaterials) do
+            if v and v.Parent then
+                v.Material = data.Material
+                v.CastShadow = data.CastShadow
+                v.Reflectance = 0
+            end
+        end
+        OriginalMaterials = {}
+    end
+end
+
+local function ApplyLite()
+    if _G.VH.LiteOptimization then
+        Lighting.GlobalShadows = false
         Lighting.FogEnd = 300
     else
+        Lighting.GlobalShadows = true
         Lighting.FogEnd = 100000
     end
 end
@@ -601,6 +668,10 @@ RunService.RenderStepped:Connect(function()
             for _, p in pairs(Players:GetPlayers()) do CreateESP(p) end
         else
             RemoveESP()
+        end
+        
+        if _G.VH.BulletTracers and firing then
+            CreateTracer()
         end
         
         if _G.VH.FOVPlayer then
@@ -650,6 +721,6 @@ RunService.RenderStepped:Connect(function()
     end)
 end)
 
-task.spawn(function() while true do ApplyOpt() task.wait(1) end end)
+task.spawn(function() while true do ApplyLite() ApplyMaxPotato() task.wait(1) end end)
 task.spawn(function() while true do task.wait(0.5) if _G.VH.Snow then CreateSnow() else RemoveSnow() end end end)
 task.spawn(function() while true do task.wait(0.1) if _G.VH.NoRecoil then pcall(function() local tool = LP.Character and LP.Character:FindFirstChildWhichIsA("Tool") if tool then for _, v in pairs(tool:GetDescendants()) do if v:IsA("NumberValue") and string.find(string.lower(v.Name), "recoil") then v.Value = 0 end end end end) end end end)
