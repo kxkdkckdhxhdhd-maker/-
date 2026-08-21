@@ -19,9 +19,10 @@ _G.VelocityHub = {
     FullBright = false,
     TransparentArms = false,
     LiteOptimization = false,
-    MaxOptimization = false,
-    MenuKey = Enum.KeyCode.RightShift
+    MaxOptimization = false
 }
+
+local IsMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 
 local PlayerGui
 repeat
@@ -98,11 +99,6 @@ Main.Draggable = true
 Main.ZIndex = 998
 Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 10)
 
-local MainBorder = Instance.new("UIStroke")
-MainBorder.Parent = Main
-MainBorder.Color = Color3.fromRGB(50, 50, 58)
-MainBorder.Thickness = 1
-
 local HeaderBar = Instance.new("Frame")
 HeaderBar.Parent = Main
 HeaderBar.Size = UDim2.new(1, 0, 0, 35)
@@ -151,6 +147,7 @@ MinimizeBtn.MouseButton1Click:Connect(function()
     Main.Visible = false
 end)
 
+-- Выбор версии с проверкой
 MobileBtn.MouseButton1Click:Connect(function()
     SelectScreen.Visible = false
     Main.Visible = true
@@ -159,20 +156,33 @@ MobileBtn.MouseButton1Click:Connect(function()
 end)
 
 PCBtn.MouseButton1Click:Connect(function()
+    if IsMobile then
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "VelocityHub",
+            Text = "PC Version только для ПК!",
+            Duration = 3
+        })
+        return
+    end
+    
     SelectScreen.Visible = false
     Main.Visible = true
     Main.Size = UDim2.new(0, 500, 0, 350)
     Main.Position = UDim2.new(0.5, -250, 0.5, -175)
 end)
 
+-- RightShift для ПК
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
-    if input.KeyCode == Enum.KeyCode.RightShift then
+    if input.KeyCode == Enum.KeyCode.RightShift and not IsMobile then
         if Main.Visible then
             Main.Visible = false
+            SelectScreen.Visible = true
         else
             SelectScreen.Visible = false
             Main.Visible = true
+            Main.Size = UDim2.new(0, 500, 0, 350)
+            Main.Position = UDim2.new(0.5, -250, 0.5, -175)
         end
     end
 end)
