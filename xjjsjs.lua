@@ -595,4 +595,134 @@ local function CreateSnow()
             em.Acceleration = Vector3.new(0,-2,0)
             em.Drag = 0.1
             em.LockedToPart = false
-          
+            em.Enabled = true
+            table.insert(SnowParts, part)
+        end
+    end
+end
+
+local function RemoveSnow()
+    for _, part in pairs(SnowParts) do part:Destroy() end
+    SnowParts = {}
+end
+
+-- [OPTIMIZATION - КАРТОФЕЛЬ]
+local OriginalMaterials = {}
+
+local function ApplyMaxPotato()
+    if _G.VH.MaxOptimization then
+        Lighting.GlobalShadows = false
+        Lighting.FogEnd = 30
+        Lighting.Brightness = 1
+        Lighting.Outlines = false
+        workspace.Terrain.WaterWaveSize = 0
+        workspace.Terrain.WaterWaveSpeed = 0
+        
+        for _, v in pairs(workspace:GetDescendants()) do
+            if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("UnionOperation") then
+                if not OriginalMaterials[v] then
+                    OriginalMaterials[v] = {
+                        Material = v.Material,
+                        CastShadow = v.CastShadow
+                    }
+                end
+                v.Material = Enum.Material.SmoothPlastic
+                v.CastShadow = false
+                v.Reflectance = 0
+                v.Color = Color3.fromRGB(128, 128, 128)
+            end
+            if v:IsA("Texture") or v:IsA("Decal") then
+                v.Transparency = 1
+            end
+            if v:IsA("ParticleEmitter") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
+                v.Enabled = false
+            end
+        end
+    else
+        for v, data in pairs(OriginalMaterials) do
+            if v and v.Parent then
+                v.Material = data.Material
+                v.CastShadow = data.CastShadow
+                v.Reflectance = 0
+            end
+        end
+        OriginalMaterials = {}
+    end
+end
+
+local function ApplyLite()
+    if _G.VH.LiteOptimization then
+        Lighting.GlobalShadows = false
+        Lighting.FogEnd = 300
+    else
+        Lighting.GlobalShadows = true
+        Lighting.FogEnd = 100000
+    end
+end
+
+-- [RENDER]
+RunService.RenderStepped:Connect(function()
+    pcall(function()
+        if not Main.Visible then return end
+        
+        if _G.VH.ESP then
+            for _, p in pairs(Players:GetPlayers()) do CreateESP(p) end
+        else
+            RemoveESP()
+        end
+        
+        if _G.VH.BulletTracers and firing then
+            CreateTracer()
+        end
+        
+        if _G.VH.FOVPlayer then
+            Camera.FieldOfView = _G.VH.FOVValue
+        else
+            Camera.FieldOfView = 70
+        end
+        
+        if _G.VH.ThirdPerson then
+            LP.CameraMode = Enum.CameraMode.Classic
+            LP.CameraMaxZoomDistance = _G.VH.TPDistance
+            LP.CameraMinZoomDistance = 0.5
+        end
+        
+        if LP.Character then
+            for _, part in pairs(LP.Character:GetChildren()) do
+                if part:IsA("BasePart") and (part.Name == "Left Arm" or part.Name == "Right Arm") then
+                    part.Transparency = _G.VH.TransparentArms and 0.7 or 0
+                end
+            end
+        end
+        
+        for _, p in pairs(Players:GetPlayers()) do
+            if p ~= LP and p.Character and p.Character:FindFirstChild("Head") then
+                local head = p.Character.Head
+                if _G.VH.Hitbox then
+                    head.Size = Vector3.new(_G.VH.HitboxSize, _G.VH.HitboxSize, _G.VH.HitboxSize)
+                    head.Transparency = 0.4
+                    head.CanCollide = false
+                else
+                    head.Size = Vector3.new(2, 1, 1)
+                    head.Transparency = 0
+                end
+            end
+        end
+        
+        if _G.VH.NightMode then
+            Lighting.ClockTime = 0
+            Lighting.Brightness = 0.1
+        elseif _G.VH.FullBright then
+            Lighting.ClockTime = 14
+            Lighting.Brightness = 5
+        else
+            Lighting.ClockTime = 14
+            Lighting.Brightness = 2
+        end
+    end)
+end)
+
+task.spawn(function() while true do ApplyLite() ApplyMaxPotato() task.wait(1) end end)
+task.spawn(function() while true do task.wait(0.5) if _G.VH.Snow then CreateSnow() else RemoveSnow() end end end)
+task.spawn(function() while true do task.wait(0.1) if _G.VH.NoRecoil then pcall(function() local tool = LP.Character and LP.Character:FindFirstChildWhichIsA("Tool") if tool then for _, v in pairs(tool:GetDescendants()) do if v:IsA("NumberValue") and string.find(string.lower(v.Name), "recoil") then v.Value = 0 end end end end) end end end)
+
