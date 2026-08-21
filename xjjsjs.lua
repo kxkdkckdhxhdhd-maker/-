@@ -38,12 +38,13 @@ local Gui = Instance.new("ScreenGui")
 Gui.Name = "VH"
 Gui.Parent = PlayerGui
 Gui.ResetOnSpawn = false
+Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 -- KEY SCREEN
 local KeyScreen = Instance.new("Frame")
 KeyScreen.Parent = Gui
-KeyScreen.Size = UDim2.new(0, 400, 0, 300)
-KeyScreen.Position = UDim2.new(0.5, -200, 0.5, -150)
+KeyScreen.Size = UDim2.new(0, 380, 0, 280)
+KeyScreen.Position = UDim2.new(0.5, -190, 0.5, -140)
 KeyScreen.BackgroundColor3 = Color3.fromRGB(10, 10, 15)
 KeyScreen.Visible = true
 KeyScreen.Active = true
@@ -70,8 +71,8 @@ KLogo.TextXAlignment = Enum.TextXAlignment.Left
 
 local NickLabel = Instance.new("TextLabel")
 NickLabel.Parent = KeyScreen
-NickLabel.Size = UDim2.new(1, -40, 0, 20)
-NickLabel.Position = UDim2.new(0, 20, 0, 55)
+NickLabel.Size = UDim2.new(1, -30, 0, 20)
+NickLabel.Position = UDim2.new(0, 15, 0, 50)
 NickLabel.BackgroundTransparency = 1
 NickLabel.Text = "Ваш Никнейм:"
 NickLabel.TextColor3 = Color3.fromRGB(180, 180, 190)
@@ -81,8 +82,8 @@ NickLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local NickInput = Instance.new("TextBox")
 NickInput.Parent = KeyScreen
-NickInput.Size = UDim2.new(1, -40, 0, 35)
-NickInput.Position = UDim2.new(0, 20, 0, 78)
+NickInput.Size = UDim2.new(1, -30, 0, 35)
+NickInput.Position = UDim2.new(0, 15, 0, 72)
 NickInput.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
 NickInput.PlaceholderText = "Nickname"
 NickInput.Text = ""
@@ -94,8 +95,8 @@ Instance.new("UICorner", NickInput).CornerRadius = UDim.new(0, 6)
 
 local KeyLabel = Instance.new("TextLabel")
 KeyLabel.Parent = KeyScreen
-KeyLabel.Size = UDim2.new(1, -40, 0, 20)
-KeyLabel.Position = UDim2.new(0, 20, 0, 120)
+KeyLabel.Size = UDim2.new(1, -30, 0, 20)
+KeyLabel.Position = UDim2.new(0, 15, 0, 112)
 KeyLabel.BackgroundTransparency = 1
 KeyLabel.Text = "Ваш Ключ:"
 KeyLabel.TextColor3 = Color3.fromRGB(180, 180, 190)
@@ -105,8 +106,8 @@ KeyLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local KeyInput = Instance.new("TextBox")
 KeyInput.Parent = KeyScreen
-KeyInput.Size = UDim2.new(1, -40, 0, 35)
-KeyInput.Position = UDim2.new(0, 20, 0, 143)
+KeyInput.Size = UDim2.new(1, -30, 0, 35)
+KeyInput.Position = UDim2.new(0, 15, 0, 134)
 KeyInput.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
 KeyInput.PlaceholderText = "XXX-XXX-XXX"
 KeyInput.Text = ""
@@ -118,8 +119,8 @@ Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 6)
 
 local KStatus = Instance.new("TextLabel")
 KStatus.Parent = KeyScreen
-KStatus.Size = UDim2.new(1, -40, 0, 20)
-KStatus.Position = UDim2.new(0, 20, 0, 185)
+KStatus.Size = UDim2.new(1, -30, 0, 20)
+KStatus.Position = UDim2.new(0, 15, 0, 175)
 KStatus.BackgroundTransparency = 1
 KStatus.Text = ""
 KStatus.TextColor3 = Color3.fromRGB(255, 100, 100)
@@ -129,8 +130,8 @@ KStatus.TextXAlignment = Enum.TextXAlignment.Center
 
 local KBtn = Instance.new("TextButton")
 KBtn.Parent = KeyScreen
-KBtn.Size = UDim2.new(1, -40, 0, 40)
-KBtn.Position = UDim2.new(0, 20, 0, 210)
+KBtn.Size = UDim2.new(1, -30, 0, 40)
+KBtn.Position = UDim2.new(0, 15, 0, 200)
 KBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 68)
 KBtn.Text = "АКТИВИРОВАТЬ"
 KBtn.TextColor3 = Color3.fromRGB(180, 180, 190)
@@ -141,8 +142,8 @@ Instance.new("UICorner", KBtn).CornerRadius = UDim.new(0, 6)
 -- SELECT SCREEN
 local SelectScreen = Instance.new("Frame")
 SelectScreen.Parent = Gui
-SelectScreen.Size = UDim2.new(0, 300, 0, 220)
-SelectScreen.Position = UDim2.new(0.5, -150, 0.5, -110)
+SelectScreen.Size = UDim2.new(0, 280, 0, 200)
+SelectScreen.Position = UDim2.new(0.5, -140, 0.5, -100)
 SelectScreen.BackgroundColor3 = Color3.fromRGB(8, 8, 10)
 SelectScreen.Visible = false
 SelectScreen.Active = true
@@ -167,8 +168,8 @@ SLogo.TextSize = 15
 
 local WelcomeText = Instance.new("TextLabel")
 WelcomeText.Parent = SelectScreen
-WelcomeText.Size = UDim2.new(1, -30, 0, 35)
-WelcomeText.Position = UDim2.new(0, 15, 0, 50)
+WelcomeText.Size = UDim2.new(1, -30, 0, 30)
+WelcomeText.Position = UDim2.new(0, 15, 0, 45)
 WelcomeText.BackgroundTransparency = 1
 WelcomeText.Text = "Выбери Свою Версию"
 WelcomeText.TextColor3 = Color3.fromRGB(180, 180, 190)
@@ -179,7 +180,7 @@ WelcomeText.TextXAlignment = Enum.TextXAlignment.Center
 local MobileBtn = Instance.new("TextButton")
 MobileBtn.Parent = SelectScreen
 MobileBtn.Size = UDim2.new(0.85, 0, 0, 35)
-MobileBtn.Position = UDim2.new(0.075, 0, 0, 95)
+MobileBtn.Position = UDim2.new(0.075, 0, 0, 85)
 MobileBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 MobileBtn.Text = "> Mobile Version"
 MobileBtn.TextColor3 = Color3.fromRGB(180, 180, 190)
@@ -191,7 +192,7 @@ Instance.new("UICorner", MobileBtn).CornerRadius = UDim.new(0, 6)
 local PCBtn = Instance.new("TextButton")
 PCBtn.Parent = SelectScreen
 PCBtn.Size = UDim2.new(0.85, 0, 0, 35)
-PCBtn.Position = UDim2.new(0.075, 0, 0, 140)
+PCBtn.Position = UDim2.new(0.075, 0, 0, 130)
 PCBtn.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 PCBtn.Text = "> PC Version"
 PCBtn.TextColor3 = Color3.fromRGB(180, 180, 190)
@@ -594,133 +595,4 @@ local function CreateSnow()
             em.Acceleration = Vector3.new(0,-2,0)
             em.Drag = 0.1
             em.LockedToPart = false
-            em.Enabled = true
-            table.insert(SnowParts, part)
-        end
-    end
-end
-
-local function RemoveSnow()
-    for _, part in pairs(SnowParts) do part:Destroy() end
-    SnowParts = {}
-end
-
--- [OPTIMIZATION - КАРТОФЕЛЬ]
-local OriginalMaterials = {}
-
-local function ApplyMaxPotato()
-    if _G.VH.MaxOptimization then
-        Lighting.GlobalShadows = false
-        Lighting.FogEnd = 30
-        Lighting.Brightness = 1
-        Lighting.Outlines = false
-        workspace.Terrain.WaterWaveSize = 0
-        workspace.Terrain.WaterWaveSpeed = 0
-        
-        for _, v in pairs(workspace:GetDescendants()) do
-            if v:IsA("Part") or v:IsA("MeshPart") or v:IsA("UnionOperation") then
-                if not OriginalMaterials[v] then
-                    OriginalMaterials[v] = {
-                        Material = v.Material,
-                        CastShadow = v.CastShadow
-                    }
-                end
-                v.Material = Enum.Material.SmoothPlastic
-                v.CastShadow = false
-                v.Reflectance = 0
-                v.Color = Color3.fromRGB(128, 128, 128)
-            end
-            if v:IsA("Texture") or v:IsA("Decal") then
-                v.Transparency = 1
-            end
-            if v:IsA("ParticleEmitter") or v:IsA("Fire") or v:IsA("Smoke") or v:IsA("Sparkles") then
-                v.Enabled = false
-            end
-        end
-    else
-        for v, data in pairs(OriginalMaterials) do
-            if v and v.Parent then
-                v.Material = data.Material
-                v.CastShadow = data.CastShadow
-                v.Reflectance = 0
-            end
-        end
-        OriginalMaterials = {}
-    end
-end
-
-local function ApplyLite()
-    if _G.VH.LiteOptimization then
-        Lighting.GlobalShadows = false
-        Lighting.FogEnd = 300
-    else
-        Lighting.GlobalShadows = true
-        Lighting.FogEnd = 100000
-    end
-end
-
--- [RENDER]
-RunService.RenderStepped:Connect(function()
-    pcall(function()
-        if not Main.Visible then return end
-        
-        if _G.VH.ESP then
-            for _, p in pairs(Players:GetPlayers()) do CreateESP(p) end
-        else
-            RemoveESP()
-        end
-        
-        if _G.VH.BulletTracers and firing then
-            CreateTracer()
-        end
-        
-        if _G.VH.FOVPlayer then
-            Camera.FieldOfView = _G.VH.FOVValue
-        else
-            Camera.FieldOfView = 70
-        end
-        
-        if _G.VH.ThirdPerson then
-            LP.CameraMode = Enum.CameraMode.Classic
-            LP.CameraMaxZoomDistance = _G.VH.TPDistance
-            LP.CameraMinZoomDistance = 0.5
-        end
-        
-        if LP.Character then
-            for _, part in pairs(LP.Character:GetChildren()) do
-                if part:IsA("BasePart") and (part.Name == "Left Arm" or part.Name == "Right Arm") then
-                    part.Transparency = _G.VH.TransparentArms and 0.7 or 0
-                end
-            end
-        end
-        
-        for _, p in pairs(Players:GetPlayers()) do
-            if p ~= LP and p.Character and p.Character:FindFirstChild("Head") then
-                local head = p.Character.Head
-                if _G.VH.Hitbox then
-                    head.Size = Vector3.new(_G.VH.HitboxSize, _G.VH.HitboxSize, _G.VH.HitboxSize)
-                    head.Transparency = 0.4
-                    head.CanCollide = false
-                else
-                    head.Size = Vector3.new(2, 1, 1)
-                    head.Transparency = 0
-                end
-            end
-        end
-        
-        if _G.VH.NightMode then
-            Lighting.ClockTime = 0
-            Lighting.Brightness = 0.1
-        elseif _G.VH.FullBright then
-            Lighting.ClockTime = 14
-            Lighting.Brightness = 5
-        else
-            Lighting.ClockTime = 14
-            Lighting.Brightness = 2
-        end
-    end)
-end)
-
-task.spawn(function() while true do ApplyLite() ApplyMaxPotato() task.wait(1) end end)
-task.spawn(function() while true do task.wait(0.5) if _G.VH.Snow then CreateSnow() else RemoveSnow() end end end)
-task.spawn(function() while true do task.wait(0.1) if _G.VH.NoRecoil then pcall(function() local tool = LP.Character and LP.Character:FindFirstChildWhichIsA("Tool") if tool then for _, v in pairs(tool:GetDescendants()) do if v:IsA("NumberValue") and string.find(string.lower(v.Name), "recoil") then v.Value = 0 end end end end) end end end)
+          
